@@ -1,0 +1,26 @@
+//
+//  FlutterMsgRegistry.swift
+//  NaturalKit
+//
+//  Created by Zhong on 2024/3/16.
+//
+
+import Foundation
+import NaturalUtil
+
+private func naming<T>(_ type: T.Type) -> String {
+    return String(describing: type)
+}
+
+public class FlutterMsgRegistry {
+    public static func get(_ name: String, _ arguments: String) -> CodableMsg? {
+        if let fun = registry[name] {
+            return fun(arguments)
+        }
+        return nil
+    }
+
+    private static var registry: [String: (String) -> CodableMsg?] = [
+{{class}}
+    ]
+}
