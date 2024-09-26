@@ -10,7 +10,15 @@ class MainPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final leftWidth = useState<double>(300);
-    final middleWidth = useState<double>(300);
+    final middleWidth = useState<double>(500);
+
+    void updateLeftWidth(double delta) {
+      leftWidth.value = (leftWidth.value + delta).clamp(100.0, 500.0);
+    }
+
+    void updateMiddleWidth(double delta) {
+      middleWidth.value = (middleWidth.value + delta).clamp(100.0, 700.0);
+    }
 
     return Scaffold(
       body: Row(
@@ -19,29 +27,27 @@ class MainPage extends HookWidget {
             width: leftWidth.value,
             child: const FileModule(),
           ),
-          MouseRegion(
-            cursor: SystemMouseCursors.resizeColumn,
-            child: GestureDetector(
-              onHorizontalDragUpdate: (details) {
-                leftWidth.value += details.delta.dx;
-              },
-              child: const SizedBox(width: 8, child: VerticalDivider()),
+          GestureDetector(
+            onHorizontalDragUpdate: (details) => updateLeftWidth(details.delta.dx),
+            onDoubleTap: () => leftWidth.value = 300,
+            child: const MouseRegion(
+              cursor: SystemMouseCursors.resizeColumn,
+              child: SizedBox(width: 8, child: VerticalDivider()),
             ),
           ),
           SizedBox(
             width: middleWidth.value,
             child: const EditorModule(),
           ),
-          MouseRegion(
-            cursor: SystemMouseCursors.resizeColumn,
-            child: GestureDetector(
-              onHorizontalDragUpdate: (details) {
-                middleWidth.value += details.delta.dx;
-              },
-              child: const SizedBox(width: 8, child: VerticalDivider()),
+          GestureDetector(
+            onHorizontalDragUpdate: (details) => updateMiddleWidth(details.delta.dx),
+            onDoubleTap: () => middleWidth.value = 300,
+            child: const MouseRegion(
+              cursor: SystemMouseCursors.resizeColumn,
+              child: SizedBox(width: 8, child: VerticalDivider()),
             ),
           ),
-          Expanded(child: const ChatModule()),
+          const Expanded(child: ChatModule()),
         ],
       ),
     );
